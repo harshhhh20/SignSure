@@ -38,3 +38,7 @@ desktop.ini
 
 # ─── Logs ────────────────────────────────────────────
 *.log
+
+# Runtime log files
+backend/err.txt
+backend/out.txt

@@ -12,7 +12,7 @@
 </head>
 <body>
 
-  <!-- ══════════ HEADER ══════════ -->
+  
   <header class="header" id="site-header">
     <div class="header-left">
       <div class="logo">
@@ -31,12 +31,10 @@
     </div>
   </header>
 
-  <!-- ══════════ MAIN ══════════ -->
+  
   <main class="main">
 
-    <!-- ─────────────────────────────────────────
-         SECTION 1: GENERATE SIGNATURE
-    ───────────────────────────────────────── -->
+    
     <section class="section" id="section-sign" aria-label="Generate Digital Signature">
       <div class="section-label">
         <span class="section-num">01</span>
@@ -44,7 +42,7 @@
       </div>
       <p class="section-desc">Upload a document to sign it with your RSA private key.</p>
 
-      <!-- Key Info Panel -->
+      
       <div class="key-info-panel" id="key-info-panel">
         <div class="kip-header">
           <div class="kip-icon" aria-hidden="true">
@@ -65,7 +63,7 @@
         </div>
       </div>
 
-      <!-- Upload card -->
+      
       <div class="card">
         <div class="upload-zone" id="sign-drop-zone" role="button" tabindex="0" aria-label="Drop zone for document signing">
           <input type="file" id="sign-file-input" class="file-input" aria-label="Upload document for signing" />
@@ -95,7 +93,7 @@
         </div>
       </div>
 
-      <!-- Sign result -->
+      
       <div class="result-card success-card" id="sign-result" hidden>
         <div class="result-header">
           <div class="result-icon success-icon" aria-hidden="true">
@@ -111,7 +109,7 @@
 
         <div class="meta-grid" id="sign-meta-grid"></div>
 
-        <!-- SHA-256 accordion -->
+        
         <details class="hash-accordion" id="hash-accordion">
           <summary class="hash-summary">
             <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" width="14" height="14"><circle cx="8" cy="8" r="7"/><path d="M8 7v5M8 5v.5"/></svg>
@@ -127,7 +125,7 @@
           </div>
         </details>
 
-        <!-- Result badge -->
+        
         <div class="result-badge authentic-badge">
           <div class="rb-title">SIGNATURE GENERATED</div>
           <div class="rb-items">
@@ -156,9 +154,7 @@
 
     <div class="section-divider" aria-hidden="true"></div>
 
-    <!-- ─────────────────────────────────────────
-         SECTION 2: VERIFY SIGNATURE
-    ───────────────────────────────────────── -->
+    
     <section class="section" id="section-verify" aria-label="Verify Document Signature">
       <div class="section-label">
         <span class="section-num">02</span>
@@ -168,7 +164,7 @@
 
       <div class="card">
         <div class="two-col-uploads">
-          <!-- Document -->
+          
           <div class="upload-col">
             <label class="upload-col-label">
               <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
@@ -188,7 +184,7 @@
               <span class="upload-sm-text" id="ver-doc-label">Drop document or click</span>
             </div>
           </div>
-          <!-- Signature -->
+          
           <div class="upload-col">
             <label class="upload-col-label">
               <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
@@ -210,7 +206,7 @@
           </div>
         </div>
 
-        <!-- Optional public key -->
+        
         <details class="optional-row">
           <summary class="optional-summary">
             <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" width="14" height="14">
@@ -236,11 +232,11 @@
         </div>
       </div>
 
-      <!-- Verify result -->
+      
       <div class="result-card" id="verify-result" hidden>
         <div class="verify-status-block" id="verify-status-block"></div>
 
-        <!-- Verification pipeline -->
+        
         <div class="pipeline-card" id="verify-pipeline" hidden>
           <div class="pipeline-title">Verification Steps</div>
           <div class="pipeline-steps">
@@ -254,7 +250,7 @@
 
         <div class="meta-grid" id="verify-meta-grid"></div>
 
-        <!-- Result badge -->
+        
         <div class="result-badge" id="verify-result-badge" hidden></div>
 
         <div class="openssl-output-wrap" id="openssl-output-wrap" hidden>
@@ -266,9 +262,7 @@
 
     <div class="section-divider" aria-hidden="true"></div>
 
-    <!-- ─────────────────────────────────────────
-         SECTION 3: DOCUMENT TAMPERING TEST
-    ───────────────────────────────────────── -->
+    
     <section class="section" id="section-tamper" aria-label="Document Tampering Test">
       <div class="section-label">
         <span class="section-num">03</span>
@@ -278,7 +272,7 @@
         Modify even a single byte and the signature verification will fail.
       </p>
 
-      <!-- Signer → Attacker → Verifier Diagram -->
+      
       <div class="amr-diagram" id="amr-diagram">
         <div class="amr-node amr-alice">
           <div class="amr-avatar amr-alice-avatar">S</div>
@@ -312,7 +306,7 @@
 
       <div class="tamper-steps">
 
-        <!-- Step 1: Sign original -->
+        
         <div class="tamper-card" id="tamp-step-a">
           <div class="tamper-card-header">
             <span class="tamper-step-badge">Step 1</span>
@@ -341,7 +335,7 @@
           </svg>
         </div>
 
-        <!-- Step 2: Verify original -->
+        
         <div class="tamper-card" id="tamp-step-b">
           <div class="tamper-card-header">
             <span class="tamper-step-badge">Step 2</span>
@@ -359,7 +353,7 @@
           </svg>
         </div>
 
-        <!-- Step 3: Upload modified -->
+        
         <div class="tamper-card" id="tamp-step-c">
           <div class="tamper-card-header">
             <span class="tamper-step-badge">Step 3</span>
@@ -383,7 +377,7 @@
         </div>
       </div>
 
-      <!-- Comparison banner -->
+      
       <div class="comparison-banner" id="comparison-banner" hidden>
         <div class="comp-side comp-original">
           <div class="comp-icon success-icon-sm" aria-hidden="true">✓</div>
@@ -422,7 +416,7 @@
         </div>
       </div>
 
-      <!-- Step 4: Verification Using Different Public Key -->
+      
       <div class="section-divider" style="margin:28px 0 20px" aria-hidden="true"></div>
       <div class="section-label" style="margin-bottom:6px">
         <span class="section-num">04</span>

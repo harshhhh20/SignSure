@@ -1,9 +1,6 @@
-/* ═══════════════════════════════════════════════════════
-   SignSure — Stylesheet (Refined)
-   Academic dark-navy theme. Subtle glass. No neon.
-═══════════════════════════════════════════════════════ */
 
-/* ─── Tokens ──────────────────────────────────────────── */
+
+
 :root {
   --bg:          #0c0f18;
   --bg-mid:      #101525;
@@ -49,7 +46,7 @@
   --dur:         0.15s;
 }
 
-/* ─── Reset ─────────────────────────────────────────────── */
+
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{font-size:15px;scroll-behavior:smooth}
 body{
@@ -76,9 +73,7 @@ code{font-family:var(--mono)}
 ::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);border-radius:2px}
 ::selection{background:rgba(99,102,241,0.15);color:var(--text)}
 
-/* ═══════════════════════════════════════════════════════
-   HEADER
-═══════════════════════════════════════════════════════ */
+
 .header{
   position:sticky;top:0;z-index:100;
   height:var(--header-h);
@@ -97,7 +92,7 @@ code{font-family:var(--mono)}
 }
 .logo-sub{font-size:0.6rem;color:var(--text-3);letter-spacing:0.02em;font-weight:400}
 
-/* ─── Tech badges ─────────────────────────────────────── */
+
 .tech-badges{display:flex;align-items:center;gap:4px}
 .tech-badge{
   font-size:0.6rem;font-weight:500;letter-spacing:0.03em;
@@ -113,9 +108,7 @@ code{font-family:var(--mono)}
   color:var(--text-3);
 }
 
-/* ═══════════════════════════════════════════════════════
-   MAIN / SECTIONS
-═══════════════════════════════════════════════════════ */
+
 .main{
   flex:1;max-width:var(--max-w);width:100%;
   margin:0 auto;padding:24px 20px 40px;
@@ -133,9 +126,7 @@ code{font-family:var(--mono)}
 .section-desc{font-size:0.8rem;color:var(--text-2);line-height:1.5;margin-bottom:14px;max-width:560px}
 .section-divider{border:none;border-top:1px solid var(--border);margin:0}
 
-/* ═══════════════════════════════════════════════════════
-   CARD — glassmorphism, subtle gradient
-═══════════════════════════════════════════════════════ */
+
 .card{
   background:var(--bg-card);
   backdrop-filter:var(--glass-blur);
@@ -153,9 +144,7 @@ code{font-family:var(--mono)}
   display:flex;align-items:center;gap:8px;flex-wrap:wrap;
 }
 
-/* ═══════════════════════════════════════════════════════
-   KEY INFO PANEL
-═══════════════════════════════════════════════════════ */
+
 .key-info-panel{
   background:var(--bg-card);
   backdrop-filter:var(--glass-blur);
@@ -187,9 +176,7 @@ code{font-family:var(--mono)}
 .kip-status.loaded{color:var(--green)}
 .kip-status.missing{color:var(--red)}
 
-/* ═══════════════════════════════════════════════════════
-   UPLOAD ZONES
-═══════════════════════════════════════════════════════ */
+
 .file-input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
 .upload-zone{
   position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;
@@ -223,9 +210,7 @@ code{font-family:var(--mono)}
 .optional-summary:hover{color:var(--text-2)}
 .optional-body{padding-top:5px}
 
-/* ═══════════════════════════════════════════════════════
-   BUTTONS — subtle gradient on primary
-═══════════════════════════════════════════════════════ */
+
 .btn-primary{
   display:inline-flex;align-items:center;gap:5px;
   background:linear-gradient(135deg, #5558e6 0%, #6d28d9 100%);
@@ -257,7 +242,7 @@ code{font-family:var(--mono)}
 .btn-danger:hover:not(:disabled){background:rgba(239,68,68,0.04);border-color:rgba(239,68,68,0.3)}
 .btn-icon{width:14px;height:14px;flex-shrink:0}
 
-/* Inline button spinner */
+
 .btn-spinner{
   display:inline-block;width:11px;height:11px;border-radius:50%;
   border:2px solid rgba(255,255,255,0.2);border-top-color:#fff;
@@ -265,9 +250,7 @@ code{font-family:var(--mono)}
 }
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* ═══════════════════════════════════════════════════════
-   RESULT CARDS
-═══════════════════════════════════════════════════════ */
+
 .result-card{
   border-radius:var(--r-lg);border:1px solid var(--border);
   overflow:hidden;margin-bottom:12px;animation:slide-in 0.2s var(--ease);
@@ -298,7 +281,7 @@ code{font-family:var(--mono)}
 .meta-value{font-size:0.78rem;font-weight:500;color:var(--text);font-family:var(--mono);word-break:break-all}
 .download-row{display:flex;align-items:center;gap:8px;padding:12px 16px;flex-wrap:wrap}
 
-/* ─── SHA-256 accordion ───────────────────────────── */
+
 .hash-accordion{
   border-top:1px solid var(--border);
   margin:0;
@@ -328,7 +311,7 @@ code{font-family:var(--mono)}
   border-left:2px solid var(--border-md);padding-left:8px;
 }
 
-/* OpenSSL output */
+
 .openssl-output-wrap{padding:10px 16px;border-top:1px solid var(--border)}
 .openssl-label{font-size:0.6rem;color:var(--text-3);text-transform:uppercase;letter-spacing:0.06em;display:block;margin-bottom:4px}
 .openssl-output{
@@ -337,7 +320,7 @@ code{font-family:var(--mono)}
   border-radius:var(--r-sm);padding:7px 10px;line-height:1.5;word-break:break-word;
 }
 
-/* ─── Verify status blocks ──────────────────────────── */
+
 .verify-status-block{padding:14px 16px}
 .verify-ok-block,.verify-fail-block{display:flex;align-items:center;gap:12px}
 .verify-big-icon{
@@ -352,7 +335,7 @@ code{font-family:var(--mono)}
 .verify-label-big.fail{color:var(--red)}
 .verify-sub{font-size:0.76rem;color:var(--text-2);line-height:1.4}
 
-/* ─── Verification Pipeline Card ────────────────────── */
+
 .pipeline-card{
   margin:0;padding:12px 16px;
   border-top:1px solid var(--border);
@@ -383,7 +366,7 @@ code{font-family:var(--mono)}
 .pipeline-result.ok{color:var(--green);background:var(--green-dim);border:1px solid var(--green-border)}
 .pipeline-result.fail{color:var(--red);background:var(--red-dim);border:1px solid var(--red-border)}
 
-/* ─── Result badge ─────────────────────────────────── */
+
 .result-badge{
   margin:0;padding:12px 16px;
   border-top:1px solid var(--border);
@@ -405,9 +388,7 @@ code{font-family:var(--mono)}
 .rb-fail .rb-icon{background:var(--red-dim);border:1px solid var(--red-border);color:var(--red)}
 .rb-fail{color:var(--text-2)}
 
-/* ═══════════════════════════════════════════════════════
-   SIGNER / ATTACKER / VERIFIER DIAGRAM
-═══════════════════════════════════════════════════════ */
+
 .amr-diagram{
   display:flex;align-items:center;gap:0;
   background:var(--bg-card);
@@ -453,15 +434,13 @@ code{font-family:var(--mono)}
   background:var(--red-dim);border:1px solid var(--red-border);color:var(--red);
 }
 
-/* Responsive diagram */
+
 @media(max-width:580px){
   .amr-diagram{flex-wrap:wrap;justify-content:center}
   .amr-arrow{transform:rotate(90deg);width:50px;flex:none}
 }
 
-/* ═══════════════════════════════════════════════════════
-   TAMPERING SECTION
-═══════════════════════════════════════════════════════ */
+
 .tamper-steps{display:flex;flex-direction:column;align-items:stretch;gap:0;margin-bottom:14px}
 .tamper-card{
   background:var(--bg-card);
@@ -490,7 +469,7 @@ code{font-family:var(--mono)}
 .tamp-status.fail{color:var(--red);background:var(--red-dim);border:1px solid var(--red-border)}
 .hash-line{margin-top:5px;font-size:0.67rem;font-family:var(--mono);color:var(--text-3);word-break:break-all;line-height:1.5}
 
-/* ─── Comparison banner ───────────────────────────────── */
+
 .comparison-banner{
   display:flex;align-items:center;gap:0;border:1px solid var(--border);
   border-radius:var(--r-lg);overflow:hidden;margin-bottom:12px;animation:slide-in 0.2s var(--ease);
@@ -511,7 +490,7 @@ code{font-family:var(--mono)}
 .ok-badge{color:var(--green);background:var(--green-dim);border:1px solid var(--green-border)}
 .danger-badge{color:var(--red);background:var(--red-dim);border:1px solid var(--red-border)}
 
-/* ─── Tamper conclusion ──────────────────────────────── */
+
 .tamper-conclusion{
   display:flex;align-items:flex-start;gap:10px;
   background:var(--yellow-dim);border:1px solid var(--yellow-border);
@@ -523,7 +502,7 @@ code{font-family:var(--mono)}
 .conclusion-text{font-size:0.78rem;color:var(--text-2);line-height:1.5}
 .conclusion-text strong{color:var(--yellow)}
 
-/* ─── Wrong Key section ──────────────────────────────── */
+
 .wrong-key-flow{
   display:flex;flex-direction:column;gap:7px;margin-bottom:4px;
 }
@@ -540,9 +519,7 @@ code{font-family:var(--mono)}
 .wkf-text{font-size:0.76rem;color:var(--text-2);line-height:1.45;padding-top:1px}
 .wkf-text strong{color:var(--text)}
 
-/* ═══════════════════════════════════════════════════════
-   RESPONSIVE
-═══════════════════════════════════════════════════════ */
+
 @media(max-width:640px){
   .two-col-uploads{grid-template-columns:1fr}
   .comparison-banner{flex-direction:column}

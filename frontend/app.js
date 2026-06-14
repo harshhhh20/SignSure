@@ -427,8 +427,7 @@ qs('#tamp-verify-orig-btn').addEventListener('click', async () => {
     if (ok) {
       qs('#comp-orig-name').textContent = tOrig.name;
       qs('#comp-orig-hash').textContent = 'SHA-256: ' + tOrigHash.slice(0, 32) + '…';
-      // Animate Alice→Bob as green
-      setDiagramState('alice-signed');
+      setDiagramState('signed');
     }
   } catch (err) {
     toast(`Verify error: ${err.message}`, 'error');
@@ -488,22 +487,22 @@ qs('#tamp-verify-mod-btn').addEventListener('click', async () => {
   }
 });
 
-// ─── Alice/Mallory/Bob diagram state ─────────────────
+// ─── Diagram state ───────────────────────────────────
 
 function setDiagramState(state) {
   const verdict = qs('#amr-verdict');
   if (!verdict) return;
-  if (state === 'alice-signed') {
+  if (state === 'signed') {
     verdict.className = 'amr-verdict ok';
-    verdict.textContent = '✓  Bob verifies: Document is AUTHENTIC — Alice signed it.';
+    verdict.textContent = '✓ Verification passed — document is authentic.';
     showEl(verdict);
   } else if (state === 'tampered') {
     verdict.className = 'amr-verdict fail';
-    verdict.textContent = '✗  Bob verifies: TAMPERED — hash mismatch detected by OpenSSL.';
+    verdict.textContent = '✗ Verification failed — hash mismatch detected.';
     showEl(verdict);
   } else if (state === 'wrong-key') {
     verdict.className = 'amr-verdict fail';
-    verdict.textContent = '✗  Bob verifies with Mallory\'s key: AUTHENTICITY FAILED — wrong public key.';
+    verdict.textContent = '✗ Verification failed — public key does not match signer.';
     showEl(verdict);
   }
 }
@@ -512,12 +511,12 @@ function setDiagramState(state) {
 
 qs('#gen-fake-key-btn').addEventListener('click', async () => {
   const btn = qs('#gen-fake-key-btn');
-  btnLoad(btn, 'Generating Mallory\'s Key…');
+  btnLoad(btn, 'Generating Key…');
   try {
     const res  = await timedFetch(`${API}/fake-key/generate`, { method: 'POST' });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error);
-    toast('Mallory\'s fake RSA-2048 key generated.', 'success');
+    toast('Different RSA-2048 key pair generated.', 'success');
     qs('#wrong-key-verify-btn').disabled = !tSession;
   } catch (err) {
     toast(`Key generation failed: ${err.message}`, 'error');
@@ -528,20 +527,20 @@ qs('#gen-fake-key-btn').addEventListener('click', async () => {
 
 qs('#wrong-key-verify-btn').addEventListener('click', async () => {
   if (!tOrig || !tSession) {
-    toast('Complete Step A first — sign a document.', 'error'); return;
+    toast('Complete Step 1 first — sign a document.', 'error'); return;
   }
   const btn = qs('#wrong-key-verify-btn');
   btnLoad(btn, 'Verifying with Wrong Key…');
   try {
     // Download original signature
     const sigRes  = await timedFetch(`${API}/sign/download/${tSession}`);
-    if (!sigRes.ok) throw new Error('Original signature not found. Complete Step A first.');
+    if (!sigRes.ok) throw new Error('Original signature not found. Complete Step 1 first.');
     const sigFile = new File([await sigRes.blob()], 'signature.sig');
 
-    // Download Mallory's fake public key
+    // Download different public key
     const pubRes = await timedFetch(`${API}/fake-key/download`);
-    if (!pubRes.ok) throw new Error('Fake key not found. Generate it first.');
-    const pubFile = new File([await pubRes.blob()], 'mallory_public_key.pem');
+    if (!pubRes.ok) throw new Error('Different key not found. Generate it first.');
+    const pubFile = new File([await pubRes.blob()], 'different_public_key.pem');
 
     // Verify original document with wrong key
     const form = new FormData();
@@ -556,12 +555,11 @@ qs('#wrong-key-verify-btn').addEventListener('click', async () => {
     resultEl.innerHTML = `
       <div class="tamp-status fail">
         <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M15 5L5 15M5 5l10 10"/></svg>
-        AUTHENTICITY FAILED — Wrong public key used
+        Verification failed — wrong public key
       </div>
-      <div class="hash-line" style="margin-top:10px;color:#9da3be;font-family:inherit;font-size:0.8rem;line-height:1.6">
-        Document: <strong style="color:#e8eaf6">${tOrig.name}</strong> — unchanged.<br>
-        Key: <strong style="color:#e8eaf6">Mallory's</strong> — does not match Alice's signature.<br>
-        Conclusion: The signature proves <em>authenticity</em>, not just <em>integrity</em>.
+      <div class="hash-line" style="margin-top:8px;color:var(--text-2);font-family:inherit;font-size:0.76rem;line-height:1.5">
+        Document: <strong style="color:var(--text)">${tOrig.name}</strong> (unchanged)<br>
+        Key: different key pair — does not match original signature.
       </div>`;
     showEl(resultEl);
     setDiagramState('wrong-key');

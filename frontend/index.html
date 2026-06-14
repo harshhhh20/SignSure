@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SignSure — Digital Signature Verification System</title>
+  <title>SignSure — Digital Signature Verification</title>
   <meta name="description" content="SignSure demonstrates RSA digital signatures, SHA-256 hashing, and document tampering detection using OpenSSL." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css?v=4" />
+  <link rel="stylesheet" href="style.css?v=6" />
 </head>
 <body>
 
@@ -16,24 +16,9 @@
   <header class="header" id="site-header">
     <div class="header-left">
       <div class="logo">
-        <svg class="logo-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M20 3L5 9v10c0 9.4 6.4 18.1 15 20 8.6-1.9 15-10.6 15-20V9L20 3z"
-                fill="url(#sg)" stroke="url(#sg2)" stroke-width="1.5"/>
-          <path d="M13 20l5 5 9-9" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-          <defs>
-            <linearGradient id="sg" x1="5" y1="3" x2="35" y2="37" gradientUnits="userSpaceOnUse">
-              <stop stop-color="#6366f1" stop-opacity="0.85"/>
-              <stop offset="1" stop-color="#8b5cf6" stop-opacity="0.7"/>
-            </linearGradient>
-            <linearGradient id="sg2" x1="5" y1="3" x2="35" y2="37" gradientUnits="userSpaceOnUse">
-              <stop stop-color="#818cf8"/>
-              <stop offset="1" stop-color="#a78bfa"/>
-            </linearGradient>
-          </defs>
-        </svg>
         <div class="logo-text">
           <span class="logo-name">SignSure</span>
-          <span class="logo-sub">OpenSSL Digital Signature Verification Platform</span>
+          <span class="logo-sub">Digital Signature Tool</span>
         </div>
       </div>
     </div>
@@ -57,7 +42,7 @@
         <span class="section-num">01</span>
         <h2 class="section-title">Generate Signature</h2>
       </div>
-      <p class="section-desc">Upload a document. SignSure signs it using your RSA private key and SHA-256 digest.</p>
+      <p class="section-desc">Upload a document to sign it with your RSA private key.</p>
 
       <!-- Key Info Panel -->
       <div class="key-info-panel" id="key-info-panel">
@@ -86,8 +71,8 @@
           <input type="file" id="sign-file-input" class="file-input" aria-label="Upload document for signing" />
           <div class="upload-icon" aria-hidden="true">
             <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect x="8" y="4" width="32" height="40" rx="4" fill="rgba(99,102,241,0.08)" stroke="rgba(99,102,241,0.3)" stroke-width="2"/>
-              <path d="M16 28h16M16 34h10" stroke="rgba(99,102,241,0.5)" stroke-width="2" stroke-linecap="round"/>
+              <rect x="8" y="4" width="32" height="40" rx="4" fill="rgba(99,102,241,0.06)" stroke="rgba(99,102,241,0.2)" stroke-width="2"/>
+              <path d="M16 28h16M16 34h10" stroke="rgba(99,102,241,0.35)" stroke-width="2" stroke-linecap="round"/>
               <path d="M24 14v12M20 18l4-4 4 4" stroke="#818cf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </div>
@@ -119,8 +104,8 @@
             </svg>
           </div>
           <div>
-            <h3 class="result-title">Signature Generated Successfully</h3>
-            <p class="result-sub">Signed with RSA-2048 + SHA-256 using OpenSSL.</p>
+            <h3 class="result-title">Signature Generated</h3>
+            <p class="result-sub">RSA-2048 + SHA-256 via OpenSSL</p>
           </div>
         </div>
 
@@ -136,9 +121,8 @@
             <div class="hash-label">SHA-256 Digest (64 hex characters)</div>
             <code class="hash-full" id="sign-hash-full"></code>
             <div class="hash-explain">
-              This 256-bit digest is what actually gets signed by the RSA private key —
-              not the document itself. Any change to the document produces a completely
-              different hash, making forgery detectable.
+              The RSA private key signs this digest, not the document directly.
+              Any modification produces a different hash.
             </div>
           </div>
         </details>
@@ -149,7 +133,7 @@
           <div class="rb-items">
             <div class="rb-item rb-ok"><span class="rb-icon">✓</span>Integrity Preserved</div>
             <div class="rb-item rb-ok"><span class="rb-icon">✓</span>Signature Valid</div>
-            <div class="rb-item rb-ok"><span class="rb-icon">✓</span>Sender Authenticated</div>
+            <div class="rb-item rb-ok"><span class="rb-icon">✓</span>Signer Authenticated</div>
           </div>
         </div>
 
@@ -180,7 +164,7 @@
         <span class="section-num">02</span>
         <h2 class="section-title">Verify Signature</h2>
       </div>
-      <p class="section-desc">Upload the original document and its signature file to check authenticity.</p>
+      <p class="section-desc">Upload a document and its signature file to verify authenticity.</p>
 
       <div class="card">
         <div class="two-col-uploads">
@@ -196,8 +180,8 @@
               <input type="file" id="ver-doc-input" class="file-input" aria-label="Upload document" />
               <div class="upload-icon-sm" aria-hidden="true">
                 <svg viewBox="0 0 32 32" fill="none">
-                  <rect x="4" y="2" width="24" height="28" rx="3" fill="rgba(99,102,241,0.07)" stroke="rgba(99,102,241,0.25)" stroke-width="1.5"/>
-                  <path d="M10 22h12M10 17h8" stroke="rgba(99,102,241,0.4)" stroke-width="1.5" stroke-linecap="round"/>
+                  <rect x="4" y="2" width="24" height="28" rx="3" fill="rgba(99,102,241,0.05)" stroke="rgba(99,102,241,0.18)" stroke-width="1.5"/>
+                  <path d="M10 22h12M10 17h8" stroke="rgba(99,102,241,0.3)" stroke-width="1.5" stroke-linecap="round"/>
                   <path d="M16 9v8M13 12l3-3 3 3" stroke="#818cf8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
               </div>
@@ -218,7 +202,7 @@
               <div class="upload-icon-sm" aria-hidden="true">
                 <svg viewBox="0 0 32 32" fill="none">
                   <path d="M25 4L7 22M17 4h8v8" stroke="#818cf8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M4 28h24" stroke="rgba(99,102,241,0.4)" stroke-width="1.5" stroke-linecap="round"/>
+                  <path d="M4 28h24" stroke="rgba(99,102,241,0.3)" stroke-width="1.5" stroke-linecap="round"/>
                 </svg>
               </div>
               <span class="upload-sm-text" id="ver-sig-label">Drop .sig file or click</span>
@@ -232,7 +216,7 @@
             <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" width="14" height="14">
               <circle cx="8" cy="8" r="7"/><path d="M8 7v5M8 5v.5"/>
             </svg>
-            Using a different public key? (optional)
+            Use a different public key (optional)
           </summary>
           <div class="optional-body">
             <div class="upload-zone upload-zone-xs" id="ver-pub-zone" role="button" tabindex="0" aria-label="Upload custom public key">
@@ -258,10 +242,10 @@
 
         <!-- Verification pipeline -->
         <div class="pipeline-card" id="verify-pipeline" hidden>
-          <div class="pipeline-title">Verification Pipeline</div>
+          <div class="pipeline-title">Verification Steps</div>
           <div class="pipeline-steps">
             <div class="pipe-step pipe-ok"><span class="pipe-dot"></span>Document Loaded</div>
-            <div class="pipe-step pipe-ok"><span class="pipe-dot"></span>SHA-256 Digest Calculated</div>
+            <div class="pipe-step pipe-ok"><span class="pipe-dot"></span>SHA-256 Digest Computed</div>
             <div class="pipe-step pipe-ok"><span class="pipe-dot"></span>Signature Decrypted with Public Key</div>
             <div class="pipe-step" id="pipe-compare"><span class="pipe-dot"></span><span id="pipe-compare-text">Hash Comparison</span></div>
           </div>
@@ -283,24 +267,22 @@
     <div class="section-divider" aria-hidden="true"></div>
 
     <!-- ─────────────────────────────────────────
-         SECTION 3: TAMPERING DEMONSTRATION
+         SECTION 3: DOCUMENT TAMPERING TEST
     ───────────────────────────────────────── -->
-    <section class="section" id="section-tamper" aria-label="Tampering Demonstration">
+    <section class="section" id="section-tamper" aria-label="Document Tampering Test">
       <div class="section-label">
         <span class="section-num">03</span>
-        <h2 class="section-title">Tampering Demonstration</h2>
-        <span class="section-badge">Key Demo</span>
+        <h2 class="section-title">Document Tampering Test</h2>
       </div>
       <p class="section-desc">
-        Prove that any change — even a single character — causes verification to fail.
-        This demonstrates <strong>document integrity</strong> and <strong>authenticity</strong>.
+        Modify even a single byte and the signature verification will fail.
       </p>
 
-      <!-- Alice → Mallory → Bob Diagram -->
+      <!-- Signer → Attacker → Verifier Diagram -->
       <div class="amr-diagram" id="amr-diagram">
         <div class="amr-node amr-alice">
-          <div class="amr-avatar amr-alice-avatar">A</div>
-          <div class="amr-name">Alice</div>
+          <div class="amr-avatar amr-alice-avatar">S</div>
+          <div class="amr-name">Signer</div>
           <div class="amr-role">Signs document</div>
         </div>
         <div class="amr-arrow amr-arrow-green" id="amr-arrow-a">
@@ -310,8 +292,8 @@
           <span class="amr-arrow-label">doc + sig</span>
         </div>
         <div class="amr-node amr-mallory">
-          <div class="amr-avatar amr-mallory-avatar">M</div>
-          <div class="amr-name">Mallory</div>
+          <div class="amr-avatar amr-mallory-avatar">A</div>
+          <div class="amr-name">Attacker</div>
           <div class="amr-role">Modifies document</div>
         </div>
         <div class="amr-arrow amr-arrow-red" id="amr-arrow-b">
@@ -321,48 +303,48 @@
           <span class="amr-arrow-label">tampered</span>
         </div>
         <div class="amr-node amr-bob">
-          <div class="amr-avatar amr-bob-avatar">B</div>
-          <div class="amr-name">Bob</div>
-          <div class="amr-role">Verifies signature</div>
+          <div class="amr-avatar amr-bob-avatar">V</div>
+          <div class="amr-name">Verifier</div>
+          <div class="amr-role">Checks signature</div>
         </div>
         <div class="amr-verdict" id="amr-verdict" hidden></div>
       </div>
 
       <div class="tamper-steps">
 
-        <!-- Step A: Sign original -->
+        <!-- Step 1: Sign original -->
         <div class="tamper-card" id="tamp-step-a">
           <div class="tamper-card-header">
-            <span class="tamper-step-badge">Step A</span>
+            <span class="tamper-step-badge">Step 1</span>
             <h3 class="tamper-card-title">Upload &amp; Sign Original Document</h3>
           </div>
           <div class="upload-zone upload-zone-sm" id="tamp-orig-zone" role="button" tabindex="0" aria-label="Upload original document">
             <input type="file" id="tamp-orig-input" class="file-input" aria-label="Upload original document" />
             <div class="upload-icon-sm" aria-hidden="true">
               <svg viewBox="0 0 32 32" fill="none">
-                <rect x="4" y="2" width="24" height="28" rx="3" fill="rgba(99,102,241,0.07)" stroke="rgba(99,102,241,0.25)" stroke-width="1.5"/>
-                <path d="M10 22h12M10 17h8" stroke="rgba(99,102,241,0.4)" stroke-width="1.5" stroke-linecap="round"/>
+                <rect x="4" y="2" width="24" height="28" rx="3" fill="rgba(99,102,241,0.05)" stroke="rgba(99,102,241,0.18)" stroke-width="1.5"/>
+                <path d="M10 22h12M10 17h8" stroke="rgba(99,102,241,0.3)" stroke-width="1.5" stroke-linecap="round"/>
                 <path d="M16 9v8M13 12l3-3 3 3" stroke="#818cf8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </div>
             <span class="upload-sm-text" id="tamp-orig-label">Drop original document or click</span>
           </div>
           <div class="tamper-card-foot">
-            <button class="btn-secondary" id="tamp-sign-btn" disabled>Sign Original</button>
+            <button class="btn-secondary" id="tamp-sign-btn" disabled>Sign Document</button>
           </div>
           <div class="tamp-result" id="tamp-sign-result" hidden></div>
         </div>
 
         <div class="tamper-arrow" aria-hidden="true">
           <svg viewBox="0 0 24 40" fill="none" width="24" height="40">
-            <path d="M12 2v30M6 27l6 7 6-7" stroke="rgba(129,140,248,0.4)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M12 2v30M6 27l6 7 6-7" stroke="rgba(129,140,248,0.3)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
 
-        <!-- Step B: Verify original -->
+        <!-- Step 2: Verify original -->
         <div class="tamper-card" id="tamp-step-b">
           <div class="tamper-card-header">
-            <span class="tamper-step-badge">Step B</span>
+            <span class="tamper-step-badge">Step 2</span>
             <h3 class="tamper-card-title">Verify Original — Should Pass</h3>
           </div>
           <div class="tamper-card-foot">
@@ -373,22 +355,22 @@
 
         <div class="tamper-arrow" aria-hidden="true">
           <svg viewBox="0 0 24 40" fill="none" width="24" height="40">
-            <path d="M12 2v30M6 27l6 7 6-7" stroke="rgba(129,140,248,0.4)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M12 2v30M6 27l6 7 6-7" stroke="rgba(129,140,248,0.3)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
 
-        <!-- Step C: Upload modified -->
+        <!-- Step 3: Upload modified -->
         <div class="tamper-card" id="tamp-step-c">
           <div class="tamper-card-header">
-            <span class="tamper-step-badge">Step C</span>
+            <span class="tamper-step-badge">Step 3</span>
             <h3 class="tamper-card-title">Upload Modified Document &amp; Verify — Should Fail</h3>
           </div>
           <div class="upload-zone upload-zone-sm" id="tamp-mod-zone" role="button" tabindex="0" aria-label="Upload modified document">
             <input type="file" id="tamp-mod-input" class="file-input" aria-label="Upload modified document" />
             <div class="upload-icon-sm" aria-hidden="true">
               <svg viewBox="0 0 32 32" fill="none">
-                <rect x="4" y="2" width="24" height="28" rx="3" fill="rgba(248,113,113,0.07)" stroke="rgba(248,113,113,0.25)" stroke-width="1.5"/>
-                <path d="M10 22h12M10 17h8" stroke="rgba(248,113,113,0.4)" stroke-width="1.5" stroke-linecap="round"/>
+                <rect x="4" y="2" width="24" height="28" rx="3" fill="rgba(248,113,113,0.05)" stroke="rgba(248,113,113,0.18)" stroke-width="1.5"/>
+                <path d="M10 22h12M10 17h8" stroke="rgba(248,113,113,0.3)" stroke-width="1.5" stroke-linecap="round"/>
                 <path d="M14 10l4 4m0-4l-4 4" stroke="#f87171" stroke-width="1.8" stroke-linecap="round"/>
               </svg>
             </div>
@@ -410,10 +392,10 @@
             <div class="comp-val" id="comp-orig-name">—</div>
             <div class="comp-hash" id="comp-orig-hash">—</div>
           </div>
-          <div class="comp-badge ok-badge">Authentic</div>
+          <div class="comp-badge ok-badge">Valid</div>
         </div>
         <div class="comp-vs" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="rgba(248,113,113,0.6)" stroke-width="2" stroke-linecap="round" width="28">
+          <svg viewBox="0 0 24 24" fill="none" stroke="rgba(248,113,113,0.5)" stroke-width="2" stroke-linecap="round" width="24">
             <path d="M18 6L6 18M6 6l12 12"/>
           </svg>
         </div>
@@ -424,7 +406,7 @@
             <div class="comp-val" id="comp-mod-name">—</div>
             <div class="comp-hash" id="comp-mod-hash">—</div>
           </div>
-          <div class="comp-badge danger-badge">Tampered</div>
+          <div class="comp-badge danger-badge">Failed</div>
         </div>
       </div>
 
@@ -436,150 +418,49 @@
           </svg>
         </div>
         <div class="conclusion-text">
-          <strong>Tampering Detected.</strong>
-          The SHA-256 hash of the modified document does not match the hash that was signed.
-          OpenSSL's RSA verification rejects it — proving document integrity is broken.
+          <strong>Hash mismatch detected.</strong> Signature verification failed.
         </div>
       </div>
 
-      <!-- Step D: Wrong Public Key Attack -->
-      <div class="section-divider" style="margin:32px 0 24px" aria-hidden="true"></div>
-      <div class="section-label" style="margin-bottom:8px">
-        <span class="section-num" style="background:rgba(245,158,11,0.12);color:#f59e0b;border-color:rgba(245,158,11,0.25)">D</span>
-        <h3 class="section-title" style="font-size:1.1rem">Wrong Public Key Attack</h3>
-        <span class="section-badge">Authenticity Demo</span>
+      <!-- Step 4: Verification Using Different Public Key -->
+      <div class="section-divider" style="margin:28px 0 20px" aria-hidden="true"></div>
+      <div class="section-label" style="margin-bottom:6px">
+        <span class="section-num">04</span>
+        <h3 class="section-title" style="font-size:1.05rem">Verification Using Different Public Key</h3>
       </div>
-      <p class="section-desc" style="margin-bottom:16px">
-        The document is <strong>not modified</strong>, but we verify it with a <em>different</em> public key (Mallory's).
-        Verification fails — proving the signature proves <strong>who signed it</strong>, not just integrity.
+      <p class="section-desc" style="margin-bottom:14px">
+        The original document is verified with a <em>different</em> key pair. Verification fails — the signature is bound to the original key.
       </p>
 
       <div class="tamper-card" id="wrong-key-card">
         <div class="wrong-key-flow">
           <div class="wkf-step">
             <div class="wkf-num">1</div>
-            <div class="wkf-text">Use the <strong>signature from Step A</strong> above (Alice's signature)</div>
+            <div class="wkf-text">Use the <strong>signature from Step 1</strong> above</div>
           </div>
           <div class="wkf-step">
             <div class="wkf-num">2</div>
-            <div class="wkf-text">Generate <strong>Mallory's fake key pair</strong> (completely different RSA key)</div>
+            <div class="wkf-text">Generate a <strong>different RSA key pair</strong></div>
           </div>
           <div class="wkf-step">
             <div class="wkf-num">3</div>
-            <div class="wkf-text">Verify Alice's document using <strong>Mallory's public key</strong></div>
+            <div class="wkf-text">Verify the original document using the <strong>different public key</strong></div>
           </div>
         </div>
-        <div class="tamper-card-foot" style="flex-wrap:wrap;gap:10px">
+        <div class="tamper-card-foot" style="flex-wrap:wrap;gap:8px">
           <button class="btn-secondary" id="gen-fake-key-btn" disabled>
-            Generate Mallory's Key
+            Generate Different Key
           </button>
           <button class="btn-secondary btn-danger" id="wrong-key-verify-btn" disabled>
-            Verify with Wrong Key
+            Verify with Different Key
           </button>
         </div>
         <div class="tamp-result" id="wrong-key-result" hidden></div>
       </div>
     </section>
 
-    <div class="section-divider" aria-hidden="true"></div>
-
-    <!-- ─────────────────────────────────────────
-         SECTION 4: CRYPTOGRAPHY CONCEPTS
-    ───────────────────────────────────────── -->
-    <section class="section" id="section-concepts" aria-label="Cryptography Concepts">
-      <div class="section-label">
-        <span class="section-num">04</span>
-        <h2 class="section-title">Cryptography Concepts</h2>
-      </div>
-      <p class="section-desc">Key concepts demonstrated in this project.</p>
-
-      <div class="concept-grid">
-        <div class="concept-card">
-          <div class="concept-icon" style="background:rgba(99,102,241,0.1);color:#818cf8">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="22" height="22">
-              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-            </svg>
-          </div>
-          <div class="concept-name">SHA-256</div>
-          <div class="concept-body">
-            Produces a fixed <strong>256-bit (32-byte)</strong> hash from any input.
-            A single character change produces a completely different hash —
-            the <em>avalanche effect</em>.
-          </div>
-          <div class="concept-tag">Hash Function</div>
-        </div>
-
-        <div class="concept-card">
-          <div class="concept-icon" style="background:rgba(139,92,246,0.1);color:#a78bfa">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="22" height="22">
-              <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3"/>
-            </svg>
-          </div>
-          <div class="concept-name">RSA-2048</div>
-          <div class="concept-body">
-            Asymmetric cryptography. The <strong>private key signs</strong>; the <strong>public key verifies</strong>.
-            2048-bit key size makes brute-force computationally infeasible.
-          </div>
-          <div class="concept-tag">Asymmetric Encryption</div>
-        </div>
-
-        <div class="concept-card">
-          <div class="concept-icon" style="background:rgba(16,185,129,0.1);color:#10b981">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="22" height="22">
-              <path d="M20 6L9 17l-5-5"/>
-            </svg>
-          </div>
-          <div class="concept-name">Digital Signature</div>
-          <div class="concept-body">
-            Provides three guarantees: <strong>Authenticity</strong> (who signed it),
-            <strong>Integrity</strong> (not tampered), and
-            <strong>Non-Repudiation</strong> (signer can't deny it).
-          </div>
-          <div class="concept-tag">Security Property</div>
-        </div>
-      </div>
-    </section>
-
-    <div class="section-divider" aria-hidden="true"></div>
-
-    <!-- ─────────────────────────────────────────
-         SECTION 5: ABOUT
-    ───────────────────────────────────────── -->
-    <section class="section" id="section-about" aria-label="About">
-      <div class="section-label">
-        <span class="section-num">05</span>
-        <h2 class="section-title">About</h2>
-      </div>
-      <div class="about-block">
-        <p class="about-text">
-          SignSure demonstrates digital signatures using <strong>OpenSSL</strong>, <strong>RSA-2048</strong>, and <strong>SHA-256</strong>.
-          The platform allows users to sign documents, verify signatures, and detect tampering — all locally, with no cloud services.
-        </p>
-      </div>
-    </section>
-
   </main>
 
-  <!-- ══════════ FOOTER ══════════ -->
-  <footer class="footer">
-    <div class="footer-inner">
-      <div class="footer-item">
-        <span class="footer-label">Cryptography Tool</span>
-        <span class="footer-value">OpenSSL 3.x</span>
-      </div>
-      <div class="footer-sep" aria-hidden="true"></div>
-      <div class="footer-item">
-        <span class="footer-label">Signature Algorithm</span>
-        <span class="footer-value">RSA-2048 + SHA-256</span>
-      </div>
-      <div class="footer-sep" aria-hidden="true"></div>
-      <div class="footer-item">
-        <span class="footer-label">Properties Demonstrated</span>
-        <span class="footer-value">Authenticity · Integrity · Non-Repudiation</span>
-      </div>
-    </div>
-  </footer>
-
-  <script src="app.js?v=4"></script>
+  <script src="app.js?v=5"></script>
 </body>
 </html>

@@ -1,8 +1,3 @@
-"""
-SignSure — Digital Signature Verification System  v2
-Flask backend using OpenSSL via subprocess
-"""
-
 import os
 import re
 import shutil
@@ -13,8 +8,6 @@ import uuid
 from flask import Flask, request, jsonify, send_file, send_from_directory
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
-
-# ─── Paths ─────────────────────────────────────────────────────────────────────
 
 BASE_DIR     = pathlib.Path(__file__).parent
 FRONTEND_DIR = BASE_DIR.parent / "frontend"
@@ -31,19 +24,13 @@ PUBLIC_KEY       = KEYS_DIR / "public.pem"
 FAKE_PRIVATE_KEY = FAKE_KEYS_DIR / "private.pem"
 FAKE_PUBLIC_KEY  = FAKE_KEYS_DIR / "public.pem"
 
-# ─── Flask App ─────────────────────────────────────────────────────────────────
-
 app = Flask(__name__, static_folder=str(FRONTEND_DIR), static_url_path="")
 CORS(app)
-app.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024  # 16 MB max upload
-
-# ─── OpenSSL helpers ───────────────────────────────────────────────────────────
+app.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024
 
 OPENSSL = shutil.which("openssl") or "openssl"
 
-
 def run_openssl(*args, input_data: bytes = None) -> tuple[bool, str, str]:
-    """Run an openssl command, return (success, stdout, stderr)."""
     cmd = [OPENSSL] + list(args)
     result = subprocess.run(
         cmd,
@@ -57,9 +44,7 @@ def run_openssl(*args, input_data: bytes = None) -> tuple[bool, str, str]:
         result.stderr.decode("utf-8", errors="replace").strip(),
     )
 
-
 def ensure_keypair() -> bool:
-    """Generate RSA-2048 key pair if it doesn't already exist."""
     if PRIVATE_KEY.exists() and PUBLIC_KEY.exists():
         return True
     ok, _, _ = run_openssl("genrsa", "-out", str(PRIVATE_KEY), "2048")
@@ -68,15 +53,12 @@ def ensure_keypair() -> bool:
     ok, _, _ = run_openssl("rsa", "-in", str(PRIVATE_KEY), "-pubout", "-out", str(PUBLIC_KEY))
     return ok
 
-
 def sha256_hex(path: pathlib.Path) -> str:
-    """Compute SHA-256 hex digest of a file."""
     h = hashlib.sha256()
     with open(path, "rb") as f:
         for chunk in iter(lambda: f.read(65536), b""):
             h.update(chunk)
     return h.hexdigest()
-
 
 def file_size_str(path: pathlib.Path) -> str:
     size = path.stat().st_size
@@ -86,9 +68,7 @@ def file_size_str(path: pathlib.Path) -> str:
         return f"{size / 1024:.1f} KB"
     return f"{size / (1024**2):.2f} MB"
 
-
 def get_key_info(private_key_path: pathlib.Path) -> dict:
-    """Extract RSA key details using openssl rsa -text."""
     ok, stdout, _ = run_openssl("rsa", "-in", str(private_key_path), "-text", "-noout")
     info = {
         "algorithm":   "RSA",
@@ -99,18 +79,13 @@ def get_key_info(private_key_path: pathlib.Path) -> dict:
         "public_key":  "Generated" if (private_key_path.parent / "public.pem").exists() else "Not found",
     }
     if ok:
-        # Parse key size
         m = re.search(r"Private-Key:\s*\((\d+)\s*bit", stdout)
         if m:
             info["key_size"] = f"{m.group(1)} bits"
-        # Parse public exponent
         m = re.search(r"publicExponent:\s*(\d+)", stdout)
         if m:
             info["exponent"] = m.group(1)
     return info
-
-
-# ─── Routes — static ───────────────────────────────────────────────────────────
 
 @app.route("/")
 def index():
@@ -120,15 +95,10 @@ def index():
 def static_files(filename):
     return send_from_directory(str(FRONTEND_DIR), filename)
 
-
-# ─── Routes — API ──────────────────────────────────────────────────────────────
-
 @app.route("/api/status", methods=["GET"])
 def status():
-    """Health check + OpenSSL version."""
     ok, ver, _ = run_openssl("version")
     keys_ready  = PRIVATE_KEY.exists() and PUBLIC_KEY.exists()
-    # Parse just the version number, e.g. "OpenSSL 3.4.1 ..."
     ver_short = ver.split(" ")[1] if ok and " " in ver else ver
     return jsonify({
         "openssl_available": ok,
@@ -137,10 +107,8 @@ def status():
         "keys_ready":        keys_ready,
     })
 
-
 @app.route("/api/keys/info", methods=["GET"])
 def keys_info():
-    """Return RSA key information for display in the Key Info Panel."""
     if not PRIVATE_KEY.exists():
         ensure_keypair()
     if not PRIVATE_KEY.exists():
@@ -148,10 +116,8 @@ def keys_info():
     info = get_key_info(PRIVATE_KEY)
     return jsonify(info)
 
-
 @app.route("/api/keys/generate", methods=["POST"])
 def generate_keys():
-    """(Re)generate RSA-2048 key pair."""
     PRIVATE_KEY.unlink(missing_ok=True)
     PUBLIC_KEY.unlink(missing_ok=True)
 
@@ -169,17 +135,14 @@ def generate_keys():
         **info,
     })
 
-
 @app.route("/api/keys/public", methods=["GET"])
 def get_public_key():
     if not PUBLIC_KEY.exists():
         return jsonify({"error": "No key pair found. Generate keys first."}), 404
     return jsonify({"public_key": PUBLIC_KEY.read_text()})
 
-
 @app.route("/api/fake-key/generate", methods=["POST"])
 def generate_fake_key():
-    """Generate a temporary 'Mallory' RSA-2048 key pair for the wrong-key attack demo."""
     FAKE_PRIVATE_KEY.unlink(missing_ok=True)
     FAKE_PUBLIC_KEY.unlink(missing_ok=True)
 
@@ -197,18 +160,14 @@ def generate_fake_key():
         "key_size": "2048 bits",
     })
 
-
 @app.route("/api/fake-key/download", methods=["GET"])
 def download_fake_pubkey():
-    """Download Mallory's fake public key."""
     if not FAKE_PUBLIC_KEY.exists():
         return jsonify({"error": "Fake key not generated yet."}), 404
     return send_file(str(FAKE_PUBLIC_KEY), as_attachment=True, download_name="mallory_public_key.pem")
 
-
 @app.route("/api/sign", methods=["POST"])
 def sign_document():
-    """Sign a document using the RSA private key with SHA-256."""
     if "document" not in request.files:
         return jsonify({"error": "No document uploaded."}), 400
 
@@ -250,7 +209,6 @@ def sign_document():
         "message":               "Document signed successfully.",
     })
 
-
 @app.route("/api/sign/download/<session_id>", methods=["GET"])
 def download_signature(session_id):
     if not session_id.isalnum() or len(session_id) != 32:
@@ -260,17 +218,14 @@ def download_signature(session_id):
         return jsonify({"error": "Signature not found."}), 404
     return send_file(str(sig_path), as_attachment=True, download_name="signature.sig")
 
-
 @app.route("/api/pubkey/download", methods=["GET"])
 def download_pubkey():
     if not PUBLIC_KEY.exists():
         return jsonify({"error": "Public key not found."}), 404
     return send_file(str(PUBLIC_KEY), as_attachment=True, download_name="public_key.pem")
 
-
 @app.route("/api/verify", methods=["POST"])
 def verify_document():
-    """Verify a document + signature. Accepts optional custom public key."""
     if "document" not in request.files:
         return jsonify({"error": "No document uploaded."}), 400
     if "signature" not in request.files:
@@ -331,7 +286,6 @@ def verify_document():
             "Verification failed. Document may have been tampered with or the wrong key was used."
         ),
     })
-
 
 if __name__ == '__main__':
     ensure_keypair()

@@ -1,12 +1,5 @@
-/* ═══════════════════════════════════════════════════════
-   SignSure v2 — Frontend Logic
-   No global overlay. Inline button spinners. Toast errors.
-═══════════════════════════════════════════════════════ */
-
 const API = 'http://127.0.0.1:5002/api';
 const TIMEOUT_MS = 20000;
-
-// ─── Fetch with hard timeout ──────────────────────────
 
 async function timedFetch(url, opts = {}) {
   const ctrl  = new AbortController();
@@ -21,21 +14,18 @@ async function timedFetch(url, opts = {}) {
   }
 }
 
-// ─── Button spinner helpers ───────────────────────────
-
 function btnLoad(btn, text = 'Working…') {
   if (!btn) return;
   btn._orig = btn.innerHTML;
   btn.disabled = true;
   btn.innerHTML = `<span class="btn-spinner"></span>${text}`;
 }
+
 function btnReset(btn) {
   if (!btn) return;
   btn.disabled = false;
   if (btn._orig) btn.innerHTML = btn._orig;
 }
-
-// ─── DOM helpers ─────────────────────────────────────
 
 const qs    = (s)  => document.querySelector(s);
 const showEl = (el) => { if (el) el.hidden = false; };
@@ -46,18 +36,18 @@ function shortName(name, max = 36) {
   const ext = name.includes('.') ? name.slice(name.lastIndexOf('.')) : '';
   return name.slice(0, max - ext.length - 1) + '…' + ext;
 }
+
 function formatSize(b) {
   if (b < 1024) return `${b} B`;
   if (b < 1024 ** 2) return `${(b / 1024).toFixed(1)} KB`;
   return `${(b / 1024 ** 2).toFixed(2)} MB`;
 }
+
 function metaGrid(items) {
   return items.map(({ label, value }) =>
     `<div class="meta-item"><div class="meta-label">${label}</div><div class="meta-value">${value}</div></div>`
   ).join('');
 }
-
-// ─── Toast notifications ─────────────────────────────
 
 function toast(msg, type = 'info') {
   const existing = document.getElementById('ss-toast');
@@ -81,8 +71,6 @@ function toast(msg, type = 'info') {
   setTimeout(() => t.remove(), 3900);
 }
 
-// ─── Upload zone setup ────────────────────────────────
-
 function setupZone(zoneId, inputId, onFile) {
   const zone  = document.getElementById(zoneId);
   const input = document.getElementById(inputId);
@@ -101,15 +89,10 @@ function setupZone(zoneId, inputId, onFile) {
   function pick(file) { zone.classList.add('has-file'); onFile(file); }
 }
 
-// ═══════════════════════════════════════════════════════
-// HEADER — Status + Key Info
-// ═══════════════════════════════════════════════════════
-
 async function loadStatus() {
   try {
     const res  = await timedFetch(`${API}/status`);
     const data = await res.json();
-    // Update OpenSSL badge
     const badge = document.getElementById('badge-openssl');
     if (badge) badge.textContent = `OpenSSL ${data.openssl_version_short || '3.x'}`;
   } catch {
@@ -144,10 +127,6 @@ function populateKeyInfo(d) {
   setStatus('ki-pub',  d.public_key);
 }
 
-// ═══════════════════════════════════════════════════════
-// SECTION 1 — GENERATE SIGNATURE
-// ═══════════════════════════════════════════════════════
-
 let signFile    = null;
 let signSession = null;
 
@@ -174,7 +153,6 @@ qs('#sign-btn').addEventListener('click', async () => {
 
     signSession = data.session_id;
 
-    // Meta grid
     qs('#sign-meta-grid').innerHTML = metaGrid([
       { label: 'Document',            value: data.filename },
       { label: 'Size',                value: data.document_size },
@@ -184,14 +162,12 @@ qs('#sign-btn').addEventListener('click', async () => {
       { label: 'Signature Size',      value: data.signature_size },
     ]);
 
-    // Full hash accordion
     const hashEl = document.getElementById('sign-hash-full');
     if (hashEl) hashEl.textContent = data.document_sha256;
 
     showEl(qs('#sign-result'));
     qs('#sign-result').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
-    // Refresh key info panel
     loadKeyInfo();
 
   } catch (err) {
@@ -201,15 +177,14 @@ qs('#sign-btn').addEventListener('click', async () => {
   }
 });
 
-// Downloads
 qs('#download-sig-btn').addEventListener('click', () => {
   if (signSession) window.location.href = `${API}/sign/download/${signSession}`;
 });
+
 qs('#download-pub-btn').addEventListener('click', () => {
   window.location.href = `${API}/pubkey/download`;
 });
 
-// Regenerate keys
 qs('#regen-key-btn').addEventListener('click', async () => {
   if (!confirm('Regenerate RSA key pair? Old signatures will no longer verify with the new key.')) return;
   const btn = qs('#regen-key-btn');
@@ -226,10 +201,6 @@ qs('#regen-key-btn').addEventListener('click', async () => {
     btnReset(btn);
   }
 });
-
-// ═══════════════════════════════════════════════════════
-// SECTION 2 — VERIFY SIGNATURE
-// ═══════════════════════════════════════════════════════
 
 let verDoc = null, verSig = null, verPub = null;
 const syncVerBtn = () => { qs('#verify-btn').disabled = !(verDoc && verSig); };
@@ -268,7 +239,6 @@ function renderVerifyResult(data) {
 
   result.className = ok ? 'result-card success-card' : 'result-card failure-card';
 
-  // Status block
   qs('#verify-status-block').innerHTML = ok ? `
     <div class="verify-ok-block">
       <div class="verify-big-icon ok">
@@ -289,7 +259,6 @@ function renderVerifyResult(data) {
       </div>
     </div>`;
 
-  // Pipeline card
   const pipeline = qs('#verify-pipeline');
   const pipeCompare = qs('#pipe-compare');
   const pipeResult  = qs('#pipeline-result');
@@ -308,7 +277,6 @@ function renderVerifyResult(data) {
     showEl(pipeline);
   }
 
-  // Meta grid
   qs('#verify-meta-grid').innerHTML = metaGrid([
     { label: 'Document',       value: data.document_name },
     { label: 'Hash Algorithm', value: data.hash_algorithm },
@@ -316,7 +284,6 @@ function renderVerifyResult(data) {
     { label: 'SHA-256',        value: data.document_sha256.slice(0, 20) + '…' },
   ]);
 
-  // Result badge
   const badge = qs('#verify-result-badge');
   if (badge) {
     badge.className = ok ? 'result-badge authentic-badge' : 'result-badge tampered-badge';
@@ -336,7 +303,6 @@ function renderVerifyResult(data) {
     showEl(badge);
   }
 
-  // OpenSSL raw output
   if (data.openssl_output) {
     qs('#openssl-output').textContent = data.openssl_output;
     showEl(qs('#openssl-output-wrap'));
@@ -344,10 +310,6 @@ function renderVerifyResult(data) {
 
   showEl(result);
 }
-
-// ═══════════════════════════════════════════════════════
-// SECTION 3 — TAMPERING DEMO
-// ═══════════════════════════════════════════════════════
 
 let tOrig = null, tMod = null, tSession = null, tOrigHash = null;
 
@@ -369,7 +331,6 @@ setupZone('tamp-orig-zone', 'tamp-orig-input', (f) => {
   tSession = null; tOrigHash = null;
 });
 
-// Step A: Sign
 qs('#tamp-sign-btn').addEventListener('click', async () => {
   if (!tOrig) return;
   const btn = qs('#tamp-sign-btn');
@@ -400,7 +361,6 @@ qs('#tamp-sign-btn').addEventListener('click', async () => {
   }
 });
 
-// Step B: Verify original
 qs('#tamp-verify-orig-btn').addEventListener('click', async () => {
   if (!tOrig || !tSession) return;
   const btn = qs('#tamp-verify-orig-btn');
@@ -436,7 +396,6 @@ qs('#tamp-verify-orig-btn').addEventListener('click', async () => {
   }
 });
 
-// Step C: Upload modified
 setupZone('tamp-mod-zone', 'tamp-mod-input', (f) => {
   tMod = f;
   qs('#tamp-mod-label').textContent = shortName(f.name);
@@ -446,7 +405,6 @@ setupZone('tamp-mod-zone', 'tamp-mod-input', (f) => {
   hideEl(qs('#tamper-conclusion'));
 });
 
-// Step C: Verify modified
 qs('#tamp-verify-mod-btn').addEventListener('click', async () => {
   if (!tMod || !tSession) return;
   const btn = qs('#tamp-verify-mod-btn');
@@ -487,8 +445,6 @@ qs('#tamp-verify-mod-btn').addEventListener('click', async () => {
   }
 });
 
-// ─── Diagram state ───────────────────────────────────
-
 function setDiagramState(state) {
   const verdict = qs('#amr-verdict');
   if (!verdict) return;
@@ -506,8 +462,6 @@ function setDiagramState(state) {
     showEl(verdict);
   }
 }
-
-// ─── Wrong Public Key Attack ──────────────────────────
 
 qs('#gen-fake-key-btn').addEventListener('click', async () => {
   const btn = qs('#gen-fake-key-btn');
@@ -532,17 +486,14 @@ qs('#wrong-key-verify-btn').addEventListener('click', async () => {
   const btn = qs('#wrong-key-verify-btn');
   btnLoad(btn, 'Verifying with Wrong Key…');
   try {
-    // Download original signature
     const sigRes  = await timedFetch(`${API}/sign/download/${tSession}`);
     if (!sigRes.ok) throw new Error('Original signature not found. Complete Step 1 first.');
     const sigFile = new File([await sigRes.blob()], 'signature.sig');
 
-    // Download different public key
     const pubRes = await timedFetch(`${API}/fake-key/download`);
     if (!pubRes.ok) throw new Error('Different key not found. Generate it first.');
     const pubFile = new File([await pubRes.blob()], 'different_public_key.pem');
 
-    // Verify original document with wrong key
     const form = new FormData();
     form.append('document', tOrig);
     form.append('signature', sigFile);
@@ -570,18 +521,12 @@ qs('#wrong-key-verify-btn').addEventListener('click', async () => {
   }
 });
 
-// ─── Inject styles ────────────────────────────────────
-
 const injectStyle = document.createElement('style');
 injectStyle.textContent = `
   @keyframes toastIn { from{opacity:0;transform:translateX(-50%) translateY(8px)} to{opacity:1;transform:translateX(-50%) translateY(0)} }
   .amr-diagram { flex-wrap: nowrap; }
 `;
 document.head.appendChild(injectStyle);
-
-// ═══════════════════════════════════════════════════════
-// INIT
-// ═══════════════════════════════════════════════════════
 
 document.addEventListener('DOMContentLoaded', () => {
   loadStatus();
